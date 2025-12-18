@@ -177,6 +177,7 @@ function GitConfig {
     git config --global user.email $email
 
 }
+
 #############################
 #  Aqui se inicia o script  #
 #############################
@@ -185,7 +186,10 @@ SyncConfig # Copia arquivos de configuracao para .dotfiles no seu diretorio pess
 InstallScoop # Install scoop
 AddScoopButckets # Add repositorios para scoop como APT do ubuntu
 InstallApps # Instala os aplicativos. 
+GoApps 
+GitConfig
 
+write-host "Carrega novamente o perfil com as melhorias"
 . $PROFILE 
 
 if (IsAdmin) {
