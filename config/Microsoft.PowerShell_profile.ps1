@@ -1,0 +1,129 @@
+Set-StrictMode -Version 3.0 
+$ErrorActionPreference = 'Stop'
+
+# Icons on terminal
+Import-Module Terminal-Icons -Scope Global  
+
+# Improvements
+Import-Module PSReadLine -Scope Global
+Set-PSReadLineKeyHandler -Key Tab -Function Complete 
+Set-PSReadLineOption -PredictionViewStyle ListView
+Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
+Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
+
+
+
+# Objetivo: Criar aliases para comandos kubernetes usando kubecolor a.k.a kubectl gourmet
+# Verifica se kubecolor está instalado
+if (-not (Get-Command kubecolor -ErrorAction SilentlyContinue)) {
+    Write-Host "kubecolor não encontrado. Instale antes de usar este script." -ForegroundColor Red
+    exit
+}
+
+# Função para criar alias com kubecolor
+function New-KubeAlias {
+    param (
+        [string]$Alias,
+        [string]$Command
+    )
+    Set-Alias -Name $Alias -Value $Command
+}
+
+# GET
+New-KubeAlias -Alias kgp -Command 'kubecolor get pods'
+New-KubeAlias -Alias kgs -Command 'kubecolor get services'
+New-KubeAlias -Alias kgd -Command 'kubecolor get deployments'
+New-KubeAlias -Alias kgn -Command 'kubecolor get nodes'
+New-KubeAlias -Alias kgi -Command 'kubecolor get ingress'
+# DELETE
+New-KubeAlias -Alias kdp -Command 'kubecolor delete pod'
+New-KubeAlias -Alias kdd -Command 'kubecolor delete deployment'
+New-KubeAlias -Alias kds -Command 'kubecolor delete service'
+# SHOW (describe)
+New-KubeAlias -Alias ksp -Command 'kubecolor describe pod'
+New-KubeAlias -Alias ksd -Command 'kubecolor describe deployment'
+New-KubeAlias -Alias ksn -Command 'kubecolor describe node'
+# CREATE
+New-KubeAlias -Alias kcr -Command 'kubecolor create -f'
+# EDIT
+New-KubeAlias -Alias ked -Command 'kubecolor edit deployment'
+New-KubeNew-KubeAlias -Alias kep -Command 'kubecolor edit pod'
+# RUN
+New-KubeAlias -Alias krun -Command 'kubecolor run'
+# EXEC
+New-KubeAlias -Alias kexec -Command 'kubecolor exec'
+
+
+# LOAD ALIAS 
+function ls {
+    eza -lbGd --header --git --sort=modified --color=always --group-directories-first --icons
+}
+
+function ll {
+    eza --tree --level=2 --color=always --group-directories-first --icons
+}
+
+function ga {
+    git add .
+}
+
+function gca {
+    git commit --amend --verbose
+}
+
+function gco {
+    git checkout
+}
+
+function gcob {
+    git checkout -b
+}
+
+# List local branchs sort by last modified 
+function glbm {
+    git for-each-ref --sort=-committerdate --format='%(refname:short) %09 %(committerdate:relative)' refs/heads/
+}
+
+# git list remote branchs sorted by last modified
+function glbmr {
+    git for-each-ref --sort=-committerdate --format='%(refname:short) %09 %(committerdate:relative)' refs/remotes/
+}
+
+function gs {
+    git status -sb
+}
+
+function gl {
+    git log --online
+}
+
+function glc {
+    git log -1 HEAD --stat
+}
+
+function grb {
+    git branch -r -v
+}
+
+function gcm {
+    git commit -m
+}
+
+function Get-GitBranch {
+    param(
+        [string]$RepositoryPath = (Get-Location).Path
+    )
+
+    if (Test-Path "$RepositoryPath\.git") {
+        $branch = git branch --show-current -b
+        return $branch
+    } else {
+        Write-Warning "Direcotrio atual '$RepositoryPath' não é um repositorio git."
+        return $null
+    }
+}
+
+Set-Variable -Name STARSHIP_CONFIG -Value $HOME\.devxp\starship\starship.toml
+
+# Starship
+Invoke-Expression (&starship init powershell)
