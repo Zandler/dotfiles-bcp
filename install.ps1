@@ -61,7 +61,7 @@ Start-Sleep -Seconds 2
 
 Clear-Host
 
-Write-Host "Instalndo git" 
+Write-Host "Instalando git" 
 scoop install main/git
 Start-Sleep -Seconds2
 

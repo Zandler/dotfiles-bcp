@@ -69,6 +69,7 @@ function InstallApps {
         "main/aws",
         "main/azure-cli",
         "main/eza",
+        "main/fzf",
         "main/git",
         "main/go",
         "main/golangci-lint",
