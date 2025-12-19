@@ -197,13 +197,13 @@ function IsAdmin {
 #  Aqui se inicia o script  #
 #############################
 
-#SyncConfig # Copia arquivos de configuracao para .dotfiles no seu diretorio pessoal
-#InstallScoop # Install scoop
-#AddScoopButckets # Add repositorios para scoop como APT do ubuntu
-#InstallApps # Instala os aplicativos. 
+SyncConfig # Copia arquivos de configuracao para .dotfiles no seu diretorio pessoal
+InstallScoop # Install scoop
+AddScoopButckets # Add repositorios para scoop como APT do ubuntu
+InstallApps # Instala os aplicativos. 
 SyncConfig
-#GoApps # Instalacao de pacotes básicos para golang
-#GitConfig # Configura GIT
+GoApps # Instalacao de pacotes básicos para golang
+GitConfig # Configura GIT
 
 
 write-host "Carrega novamente o perfil com as melhorias"
