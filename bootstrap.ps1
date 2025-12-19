@@ -178,22 +178,39 @@ function GitConfig {
 
 }
 
+function IsAdmin {
+    # Verifica se o script está sendo executado com privilégios de administrador local
+    $adminGroup = [System.Security.Principal.WindowsBuiltInRole]::Administrator
+    $currentUser = [Security.Principal.WindowsIdentity]::GetCurrent()
+    $isAdmin = $currentUser.Groups -match "S-1-5-32-544"  # SID do grupo "Administradores"
+
+    if ($isAdmin) {
+        Write-Host "You'r local admin. "
+    } else {
+        Write-Host "You are not admin local. Skip Install WSL "
+    Exit
+    }
+}
+
 #############################
 #  Aqui se inicia o script  #
 #############################
 
-SyncConfig # Copia arquivos de configuracao para .dotfiles no seu diretorio pessoal
-InstallScoop # Install scoop
-AddScoopButckets # Add repositorios para scoop como APT do ubuntu
-InstallApps # Instala os aplicativos. 
-GoApps 
-GitConfig
+#SyncConfig # Copia arquivos de configuracao para .dotfiles no seu diretorio pessoal
+#InstallScoop # Install scoop
+#AddScoopButckets # Add repositorios para scoop como APT do ubuntu
+#InstallApps # Instala os aplicativos. 
+SyncConfig
+#GoApps # Instalacao de pacotes básicos para golang
+#GitConfig # Configura GIT
+
 
 write-host "Carrega novamente o perfil com as melhorias"
 . $PROFILE 
 
+# Verifica se á admin local para instalação do wsl
 if (IsAdmin) {
-    InstallWsl # Intall Wsl for SRE - python - node - docker
+    InstallWsl # Intall WSL2 for SRE - python - node - docker
 }
 
 Write-Host "Configuração realizado com sucesso. Aproveite" -ForegroundColor DarkCyan
