@@ -67,6 +67,7 @@ function InstallApps {
         "extras/vscode",
         "main/7zip",
         "main/aws",
+        "main/azure-kubelogin",
         "main/azure-cli",
         "main/eza",
         "main/fzf",
